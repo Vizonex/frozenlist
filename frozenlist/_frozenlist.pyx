@@ -8,15 +8,18 @@ import copy
 import types
 from collections.abc import MutableSequence
 
+cimport cython
 
+# Disable pickling due to atomic variable
+@cython.auto_pickle(False)
 cdef class FrozenList:
     __class_getitem__ = classmethod(types.GenericAlias)
 
     cdef atomic[bint] _frozen
     cdef list _items
 
-    def __init__(self, items=None):
-        self._frozen.store(False)
+    def __init__(self, items=None, bint frozen = False):
+        self._frozen.store(frozen)
         if items is not None:
             items = list(items)
         else:
@@ -144,5 +147,8 @@ cdef class FrozenList:
 
         return new_list
 
+    def __reduce__(self):
+        return (self.__class__, (self._items, self.frozen))
+    
 
 MutableSequence.register(FrozenList)

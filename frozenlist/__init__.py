@@ -5,7 +5,7 @@ from functools import total_ordering
 
 __version__ = "1.7.1.dev0"
 
-__all__ = ("FrozenList", "PyFrozenList")  # type: Tuple[str, ...]
+__all__ = ("FrozenList", "PyFrozenList")  # type: tuple[str, ...]
 
 
 NO_EXTENSIONS = bool(os.environ.get("FROZENLIST_NO_EXTENSIONS"))  # type: bool
@@ -72,7 +72,6 @@ class FrozenList(MutableSequence):
             return hash(tuple(self))
         else:
             raise RuntimeError("Cannot hash unfrozen list.")
-
 
 PyFrozenList = FrozenList
 
